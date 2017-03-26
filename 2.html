@@ -1,0 +1,20 @@
+
+
+Chat Output
+<div id=box></div>
+<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.5.0.js"></script>
+
+<script>(function(){
+var pubnub = new PubNub({subscribeKey : 'sub-c-f2f067ec-1051-11e7-ab7b-02ee2ddab7fe', });
+function $(id) { return document.getElementById(id); }
+
+var box=$(box), channel="chat-1";
+
+pubnub.addListener({
+    message: function(obj) {
+        box.innerHTML = (''+obj.message).replace( /[<>]/g, '' ) + '<br>' + box.innerHTML
+    }});
+
+pubnub.subscribe({channels:[channel]});
+
+})();</script>

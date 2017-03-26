@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+  <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.5.0.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+  <script src="https://cdn.pubnub.com/sdk/pubnub-angular/pubnub-angular-4.0.2.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+</head>
+<body>
+<div class="container" ng-app="PubNubAngularApp" ng-controller="MySpeechCtrl">
+
+<pre>
+NOTE: make sure to update the PubNub keys below with your keys,
+and ensure that the text-to-speech BLOCK is configured properly!
+</pre>
+
+<h3>MyText to Speech</h3>
+
+<audio id="theAudio"></audio>
+
+<input ng-model="toSend" />
+<input type="button" ng-click="publish()" value="Send!" />
+
+<br /><br />
+
+<audio id="theAudio"></audio>
+
+<ul>
+  <li ng-repeat="message in messages track by $index">
+    {{message.text}}
+    <br />
+    <a ng-click="sayIt(message.speech)">play audio</a>
+  </li>
+</ul>
+
+</div>
+
+<script>
+angular.module('PubNubAngularApp', ["pubnub.angular.service"])
+.controller('MySpeechCtrl', function($rootScope, $scope, Pubnub) {
+  $scope.messages     = [];
+  $scope.msgChannel   = 'text-to-speech-chat';
+
+  if (!$rootScope.initialized) {
+    Pubnub.init({
+      publishKey: 'pub-c-ed85f391-63f8-48ff-9150-ff4c0cb0ab57',
+      subscribeKey: 'sub-c-f2f067ec-1051-11e7-ab7b-02ee2ddab7fe',
+      ssl:true
+    });
+    $rootScope.initialized = true;
+  }
+
+  var msgCallback = function(payload) {
+    $scope.$apply(function() {
+      $scope.messages.push(payload);
+    });
+    $scope.sayIt(payload.speech);
+  };
+
+  $scope.publish = function() {
+    Pubnub.publish({
+      channel: $scope.msgChannel,
+      message: {text:$scope.toSend}
+    });
+
+    $scope.toSend = "";
+  };
+
+  Pubnub.subscribe({ channels: [$scope.msgChannel] });
+  Pubnub.addListener({ message: msgCallback });
+
+  $scope.sayIt = function (url) {
+    var audioElement = $("#theAudio")[0];
+    audioElement.src = url;
+    audioElement.play();
+  };
+});
+</script>
+</body>
+</html>
