@@ -1,0 +1,82 @@
+<html>
+<head>
+<title>chatAPP</title>
+
+<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.5.0.js"></script>
+<script src="https://satya1990.github.io/1.js" > </script>
+
+<style>
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #efefef;
+  text-align: center;
+}
+.rightSide {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 1rem;
+  width: 20%;
+  border: 1px 1px 1px;
+  background-color: #efefef;
+  text-align: center;
+}
+
+.right  {
+  position: absolute;
+  visibility: hidden;
+  border-radius: 10px;
+  right: 10%;
+  top: 300px;
+  height: auto;
+  width: 150px;
+  color: navy;
+  background-color: yellow;
+  border: 2px solid darkblue;
+  padding: 5px;
+}
+.right-2  {
+  position: absolute;
+  visibility: hidden;
+  border-radius: 10px;
+  right: 30%;
+  top: 300px;
+  height: auto;
+  width: 150px;
+  color: navy;
+  background-color: yellow;
+  border: 2px solid darkblue;
+  padding: 5px;
+}
+
+
+</style>
+</head>
+<body>
+
+<div align="center" style="border:1px solid blue" id=userName>userName</div>
+<div id=menu align='right'>
+<button id=users_button >All Users</button>
+<button id=channels_button > List of Channels subscribed </buttton>
+</div>
+
+Enter Chat and press enter
+<div><input id=input placeholder=your-chat-here /></div>
+
+Chat Output
+<div id=box></div>
+
+<div class=footer >Active User Count : <span id=occupancy>1</span></div>
+<div class=right id=display_users title="all_users">  </div>
+<div class=right-2 id=display_channels title="all_channels">  </div>
+</body>
+</html>
